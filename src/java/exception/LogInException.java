@@ -3,15 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package service;
+package exception;
 
 /**
  *
  * @author emilio
  */
-public class PersistenciaFacade {
+public class LogInException extends Exception{
 
-    public static String logIn(String user, String password) {
-        return new LogInController().logIn(user, password);
+    public LogInException(String string, Throwable thrwbl) {
+        super(string, thrwbl);
     }
+    
 }

@@ -21,9 +21,9 @@
         </div>
     </header>
     <main>
-        <form action="" method="POST">
+        <form action="login" method="POST">
             <div class="form-log">
-                <label for="uname"><b>Usuario</b></label>
+                <label for="uname"><b>Matrícula</b></label>
                 <input class="form-input" type="text" placeholder="" name="uname" required>
 
                 <label for="psw"><b>Contraseña</b></label>

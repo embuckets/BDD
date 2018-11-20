@@ -5,41 +5,44 @@
  */
 package service;
 
+import dominio.Alumno;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author emilio
  */
-public class LogInController {
+public class AlumnoController {
 
-    public String logIn(String user, String password) {
+    public Alumno getAlumnoByMatricula(String matricula) {
         String url = new LocalURL().getURL();
-        String result = null;
+        Alumno result = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         Connection conn = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection(url);
-            preparedStatement = conn.prepareStatement("select rol from rol where id_rol = ( select id_rol from login where matricula=? and password=? )");
-            preparedStatement.setString(1, user);
-            preparedStatement.setString(2, password);
+            preparedStatement = conn.prepareStatement("select * from alumno where matricula =?");
+            preparedStatement.setString(1, matricula);
             resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()){
-                result = resultSet.getString("rol");
+            if (resultSet.next()) {
+                result = new Alumno();
+                result.setMatricula(matricula);
+                result.setNombre(resultSet.getString("nombre"));
+                result.setPaterno(resultSet.getString("paterno"));
+                result.setMaterno(resultSet.getString("materno"));
+                result.setIdDivision(resultSet.getInt("id_division"));
+                result.setIdUnidad(resultSet.getInt("id_unidad"));
             }
-            
-                    
+
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
-            
+
         } catch (SQLException ex) {
             //TODO: checar si la base de datos esta desconectada para intentar las otras
             ex.printStackTrace();
@@ -68,4 +71,5 @@ public class LogInController {
         }
         return result;
     }
+
 }

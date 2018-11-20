@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 /**
@@ -16,26 +17,29 @@ import java.util.Properties;
  * @author emilio
  */
 public class LocalURL {
-    private static String protocol;
-    private static String host;
-    private static String port;
-    private static String database;
-    private static String user;
-    private static String password;
 
-    static {
+    private String protocol;
+    private String host;
+    private String port;
+    private String database;
+    private String user;
+    private String password;
+
+    public LocalURL() {
         init();
     }
-    
-    public static String getURL(){
-        return protocol + host + ":" +  port + "/" + database + "?user=" + user + "&password=" + password;
+
+    public String getURL() {
+        return protocol + host + ":" + port + "/" + database + "?user=" + user + "&password=" + password;
     }
-    
-    
-    public static void init() {
+
+    public void init() {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        InputStream input = classLoader.getResourceAsStream("resources/database-local.xml");
+// ...
         Properties props = new Properties();
         try {
-            props.loadFromXML(new FileInputStream(new File("database-local.xml")));
+            props.loadFromXML(input);
             protocol = props.getProperty("protocol");
             host = props.getProperty("host");
             port = props.getProperty("port");

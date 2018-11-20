@@ -32,6 +32,7 @@ public class LocalURLTest {
     
     @Before
     public void setUp() {
+        localURLTested = new LocalURL();
         
     }
     
@@ -54,7 +55,8 @@ public class LocalURLTest {
     @Test
     public void testInit() {
         System.out.println("init");
-        LocalURL.init();
+        localURLTested = new LocalURL();
+        localURLTested.init();
         // TODO review the generated test code and remove the default call to fail.
     }
     
