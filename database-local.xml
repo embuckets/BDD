@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>config emilio</comment>
+    <entry key="protocol">jdbc:mysql://</entry>
+    <entry key="host">localhost</entry>
+    <entry key="port">3306</entry>
+    <entry key="database">sivo</entry>
+    <entry key="user">emilio</entry>
+    <entry key="password">emilio</entry>
+</properties>
