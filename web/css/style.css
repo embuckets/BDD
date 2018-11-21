@@ -11,7 +11,12 @@ and open the template in the editor.
 body {
     font-family: 'Ubuntu', sans-serif;
     margin: 0px;
+    font-size: 17px;
 }
+
+/*body > * {
+    font-size: 17px;
+}*/
 
 .left {
     float: left;
@@ -37,7 +42,7 @@ body {
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
-    font-size: 17px;
+    /*font-size: 17px;*/
 }
 
 /* Change the color of links on hover */

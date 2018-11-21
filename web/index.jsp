@@ -17,7 +17,7 @@
 <body>
     <header>
         <div class="topnav">
-            <a class="active center" href="#home">SIVO</a>
+            <a class="active center" href="/BDD">SIVO</a>
         </div>
     </header>
     <main>
@@ -29,7 +29,7 @@
                 <label for="psw"><b>Contraseña</b></label>
                 <input class="form-input" type="password" placeholder="" name="psw" required>
 
-                <button class="form-submit" type="submit">Login</button>
+                <button class="form-submit" type="submit">Entrar</button>
         </form>
     </main>
     <jsp:include page="templates/footer.jsp"></jsp:include>

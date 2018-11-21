@@ -11,7 +11,8 @@ import java.util.Objects;
  *
  * @author emilio
  */
-public class Alumno {
+public class Alumno implements Usuario {
+
     private String matricula;
     private String nombre;
     private String paterno;
@@ -31,6 +32,7 @@ public class Alumno {
     public Alumno() {
     }
 
+    @Override
     public String getMatricula() {
         return matricula;
     }
@@ -39,6 +41,7 @@ public class Alumno {
         this.matricula = matricula;
     }
 
+    @Override
     public String getNombre() {
         return nombre;
     }
@@ -71,6 +74,7 @@ public class Alumno {
         this.idDivision = idDivision;
     }
 
+    @Override
     public int getIdUnidad() {
         return idUnidad;
     }
@@ -123,6 +127,5 @@ public class Alumno {
         }
         return true;
     }
-    
-    
+
 }
