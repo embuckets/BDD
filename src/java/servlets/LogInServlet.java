@@ -81,10 +81,11 @@ public class LogInServlet extends HttpServlet {
             throws ServletException, IOException {
         String matricula = request.getParameter("uname");
         String password = request.getParameter("psw");
+        
         HttpSession session = request.getSession();
         LogInController logInController = new LogInController();
         String rol = logInController.logIn(matricula, password);
-        String nextURL = "/home.jsp";
+        String nextURL = "/home";
         //si es usuario valido, es decir, rol es alumno o admin redirige a su home
         if (rol != null) {
             // agrega al alumno o admin a la session 
@@ -107,8 +108,10 @@ public class LogInServlet extends HttpServlet {
         } else {
             nextURL = "/index.jsp";
         }
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextURL);
-        dispatcher.forward(request, response);
+//        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextURL);
+//        dispatcher.forward(request, response);
+
+        response.sendRedirect(getServletContext().getContextPath() + nextURL);
     }
 
     /**

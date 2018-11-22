@@ -73,6 +73,59 @@ public class EncuestaController {
             }
         }
         return result;
+    }
 
+    public Encuesta getEncuestaById(int idEncuesta) {
+        String url = new LocalURL().getURL();
+        Encuesta result = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        Connection conn = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection(url);
+            preparedStatement = conn.prepareStatement("select * from encuesta where id_encuesta=?");//and cierra between now() - interval 7 day and now()
+            preparedStatement.setInt(1, idEncuesta);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                result = new Encuesta();
+                result.setIdEncuesta(resultSet.getInt("id_encuesta"));
+                result.setTitulo(resultSet.getString("titulo"));
+                result.setDescripcion(resultSet.getString("descripcion"));
+                result.setAbre(resultSet.getTimestamp("abre").toLocalDateTime());
+                result.setCierra(resultSet.getTimestamp("cierra").toLocalDateTime());
+                result.setIdUnidad(resultSet.getInt("id_unidad"));
+            }
+
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+
+        } catch (SQLException ex) {
+            //TODO: checar si la base de datos esta desconectada para intentar las otras
+            ex.printStackTrace();
+        } finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        return result;
     }
 }

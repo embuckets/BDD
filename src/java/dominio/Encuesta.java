@@ -6,6 +6,8 @@
 package dominio;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -13,12 +15,14 @@ import java.util.Objects;
  * @author emilio
  */
 public class Encuesta {
+
     private int idEncuesta;
     private String titulo;
     private String descripcion;
     private LocalDateTime abre;
     private LocalDateTime cierra;
     private int idUnidad;
+    private List<Opcion> opciones;
 
     public Encuesta(int idEncuesta, String titulo, String descripcion, LocalDateTime abre, LocalDateTime cierra, int idUnidad) {
         this.idEncuesta = idEncuesta;
@@ -27,9 +31,11 @@ public class Encuesta {
         this.abre = abre;
         this.cierra = cierra;
         this.idUnidad = idUnidad;
+        this.opciones = new ArrayList<>();
     }
 
     public Encuesta() {
+        this.opciones = new ArrayList<>();
     }
 
     public int getIdEncuesta() {
@@ -78,6 +84,18 @@ public class Encuesta {
 
     public void setIdUnidad(int idUnidad) {
         this.idUnidad = idUnidad;
+    }
+
+    public List<Opcion> getOpciones() {
+        return opciones;
+    }
+
+    public void addOpcion(Opcion opcion) {
+        this.opciones.add(opcion);
+    }
+
+    public void setOpciones(List<Opcion> opciones) {
+        this.opciones = opciones;
     }
 
     @Override
@@ -129,8 +147,5 @@ public class Encuesta {
     public String toString() {
         return "Encuesta{" + "idEncuesta=" + idEncuesta + ", titulo=" + titulo + ", descripcion=" + descripcion + ", abre=" + abre + ", cierra=" + cierra + ", idUnidad=" + idUnidad + '}';
     }
-    
-    
-    
-    
+
 }

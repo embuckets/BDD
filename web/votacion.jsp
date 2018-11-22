@@ -1,6 +1,6 @@
 <%-- 
-    Document   : newjsp
-    Created on : 19/11/2018, 11:01:28 PM
+    Document   : votacion
+    Created on : 21/11/2018, 06:22:51 PM
     Author     : emilio
 --%>
 
@@ -11,12 +11,12 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <jsp:include page="templates/head.jsp"></jsp:include>
         <script src="js/home.js"></script>
-            <title>SIVO Home</title>
+            <title>SIVO Votacion</title>
         </head>
-        <body onload="requestEncuestas()">
+        <body onload="requestOpciones()">
         <jsp:include page="templates/header.jsp"></jsp:include>
 
-        <div id="container" class="encuestas grid-container"></div>
+        <div id="form-voto" class="card"></div>
 
         <jsp:include page="templates/footer.jsp"></jsp:include>
     </body>

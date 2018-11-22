@@ -107,13 +107,15 @@ body {
 
 /* footer */
 .footer {
-   position: fixed;
-   left: 0;
-   bottom: 0;
-   width: 100%;
-   background-color: black;
-   color: white;
-   text-align: center;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    background-color: black;
+    color: white;
+    text-align: center;
+    /*margin-top: 20px;*/
+    padding: 8px 0px;
+    width: 100%;
 }
 
 .form-input {
@@ -144,4 +146,54 @@ body {
 
 .from-submit:hover {
     opacity: 0.8;
+}
+
+.encuestas {
+    max-width: 80vw;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.grid-container {
+    display: grid;
+    grid-column-gap: 30px;
+    grid-row-gap: 30px;
+    grid-template-columns: 1fr 1fr;
+}
+
+.card {
+    border: 1px solid lightgray;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    background-color: white;
+    /* box-shadow: 1px 1px 20px 1px black; */
+}
+
+.card-title {
+}
+
+.card-text {
+}
+
+.card-button {
+    background-color: #4CAF50;
+    padding: 10px 18px;
+    border: none;
+    text-align: center;
+    cursor: pointer;
+    line-height: 20px;
+    font-size: 17px;
+    color: white;
+    display: box;
+    margin-top: 20px;
+}
+.card-button:hover {
+    opacity: 0.8;
+}
+
+.text-muted {
+    color: #737373;
+    font-size: smaller;
+    margin-right: 20px;
 }

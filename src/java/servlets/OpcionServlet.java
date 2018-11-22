@@ -5,26 +5,21 @@
  */
 package servlets;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dominio.Encuesta;
-import dominio.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.LocalDateTime;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import service.EncuestaController;
+import service.OpcionController;
 
 /**
  *
  * @author emilio
  */
-public class EncuestaServlet extends HttpServlet {
+public class OpcionServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,10 +38,10 @@ public class EncuestaServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet EncuestaServlet</title>");
+            out.println("<title>Servlet OpcionServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet EncuestaServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet OpcionServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -64,18 +59,10 @@ public class EncuestaServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //regresar las encuestas proximas en formato json
-        HttpSession session = request.getSession();
-        Usuario usuario = (Usuario) session.getAttribute("user");
-        EncuestaController encuestaController = new EncuestaController();
-        List<Encuesta> encuestas = encuestaController.getEncuestasByIdUnidad(usuario.getIdUnidad());
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonString = mapper.writeValueAsString(encuestas);
-        response.setContentType("application/json;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.write(jsonString);
-        }
+        int encuestaId = (int) request.getSession().getAttribute("encuestaId");
+        Encuesta encuesta = new EncuestaController().getEncuestaById(encuestaId);
+        encuesta.setOpciones(new OpcionController().getOpcionesByIdEncuesta(encuestaId));
+        //TODO: convertir a JSON 
     }
 
     /**
@@ -89,20 +76,7 @@ public class EncuestaServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int encuestaId = Integer.valueOf(request.getParameter("encuestaId"));
-        request.getSession().setAttribute("encuestaId", encuestaId);
-        EncuestaController encuestaController = new EncuestaController();
-        Encuesta encuesta = encuestaController.getEncuestaById(encuestaId);
-        if (encuesta.getCierra().isBefore(LocalDateTime.now())){
-            //redirigir a opcion votacion
-            
-            
-        } else {
-            //redirigir a resultados
-            
-        }
-        
-        
+        processRequest(request, response);
     }
 
     /**
@@ -114,11 +88,5 @@ public class EncuestaServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
-    public String toJsonString(List<Encuesta> encuestas) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(encuestas);
-
-    }
 
 }
