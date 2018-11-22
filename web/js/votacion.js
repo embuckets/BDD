@@ -26,14 +26,16 @@ function buildEncuesta(jsonObj) {
 }
 
 function display(jsonText) {
-    var container = document.getElementById("container");
+    var container = document.getElementById("form-voto");
     var jsonArray = JSON.parse(jsonText);
-    var encuestas = [];
-    for (i in jsonArray) {
-        var encuesta = buildEncuesta(jsonArray[i]);
-        var card = buildCard(encuesta);
-        container.appendChild(card);
-    }
+    document.getElementById("res").innerHTML = jsonText;
+
+    // var encuestas = [];
+    // for (i in jsonArray) {
+    //     var encuesta = buildEncuesta(jsonArray[i]);
+    //     var card = buildCard(encuesta);
+    //     container.appendChild(card);
+    // }
 
 }
 
@@ -62,7 +64,7 @@ function buildCard(encuesta) {
     cardButton.innerHTML = "Votar";
 
     var form = document.createElement("form");
-    form.method  = "POST";
+    form.method = "POST";
     form.action = "encuesta";
     var hidden = document.createElement("input");
     hidden.type = "hidden";

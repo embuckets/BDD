@@ -5,6 +5,7 @@
  */
 package servlets;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dominio.Encuesta;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -62,6 +63,11 @@ public class OpcionServlet extends HttpServlet {
         int encuestaId = (int) request.getSession().getAttribute("encuestaId");
         Encuesta encuesta = new EncuestaController().getEncuestaById(encuestaId);
         encuesta.setOpciones(new OpcionController().getOpcionesByIdEncuesta(encuestaId));
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonString = mapper.writeValueAsString(encuesta);
+        try (PrintWriter writer = response.getWriter()) {
+            writer.write(jsonString);
+        }
         //TODO: convertir a JSON 
     }
 

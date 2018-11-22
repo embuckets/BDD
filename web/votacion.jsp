@@ -17,6 +17,7 @@
         <jsp:include page="templates/header.jsp"></jsp:include>
 
         <div id="form-voto" class="card"></div>
+        <p id="res"></p>
 
         <jsp:include page="templates/footer.jsp"></jsp:include>
     </body>

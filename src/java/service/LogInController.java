@@ -26,20 +26,20 @@ public class LogInController {
         ResultSet resultSet = null;
         Connection conn = null;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+//            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(url);
             preparedStatement = conn.prepareStatement("select rol from rol where id_rol = ( select id_rol from login where matricula=? and password=? )");
             preparedStatement.setString(1, user);
             preparedStatement.setString(2, password);
             resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()){
+            if (resultSet.next()) {
                 result = resultSet.getString("rol");
             }
-            
-                    
+
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
-            
+
         } catch (SQLException ex) {
             //TODO: checar si la base de datos esta desconectada para intentar las otras
             ex.printStackTrace();

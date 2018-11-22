@@ -95,7 +95,7 @@ public class EncuestaServlet extends HttpServlet {
         Encuesta encuesta = encuestaController.getEncuestaById(encuestaId);
         if (encuesta.getCierra().isBefore(LocalDateTime.now())){
             //redirigir a opcion votacion
-            
+            response.sendRedirect(getServletContext().getContextPath() + "/votacion.jsp");
             
         } else {
             //redirigir a resultados
