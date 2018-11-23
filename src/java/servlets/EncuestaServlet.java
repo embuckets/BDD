@@ -5,6 +5,7 @@
  */
 package servlets;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dominio.Encuesta;
@@ -70,6 +71,7 @@ public class EncuestaServlet extends HttpServlet {
         EncuestaController encuestaController = new EncuestaController();
         List<Encuesta> encuestas = encuestaController.getEncuestasByIdUnidad(usuario.getIdUnidad());
         ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(JsonGenerator.Feature.WRITE_NUMBERS_AS_STRINGS);
         String jsonString = mapper.writeValueAsString(encuestas);
         response.setContentType("application/json;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
@@ -93,7 +95,7 @@ public class EncuestaServlet extends HttpServlet {
         request.getSession().setAttribute("encuestaId", encuestaId);
         EncuestaController encuestaController = new EncuestaController();
         Encuesta encuesta = encuestaController.getEncuestaById(encuestaId);
-        if (encuesta.getCierra().isBefore(LocalDateTime.now())){
+        if (encuesta.getCierra().isAfter(LocalDateTime.now())){
             //redirigir a opcion votacion
             response.sendRedirect(getServletContext().getContextPath() + "/votacion.jsp");
             

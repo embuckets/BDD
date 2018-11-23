@@ -5,8 +5,12 @@
  */
 package service;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import dominio.Encuesta;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -78,11 +82,16 @@ public class EncuestaControllerTest {
         List<Encuesta> expResult = new ArrayList<>();
         expResult.add(encuestaAzc);
         List<Encuesta> result = instance.getEncuestasByIdUnidad(idUnidad);
-        assertEquals(expResult, result);
+//        assertEquals(expResult, result);
         ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(JsonGenerator.Feature.WRITE_NUMBERS_AS_STRINGS);
         try {
             String jsonString = mapper.writeValueAsString(result);
             System.out.println(jsonString);
+            mapper.enable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+            String otro = mapper.writeValueAsString(result);
+            System.out.println(otro);
+
 //        result.stream().forEach((e) -> System.out.println(e));
 // TODO review the generated test code and remove the default call to fail.
         } catch (JsonProcessingException ex) {

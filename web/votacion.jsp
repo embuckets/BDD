@@ -10,14 +10,13 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <jsp:include page="templates/head.jsp"></jsp:include>
-        <script src="js/home.js"></script>
+        <script src="js/votacion.js"></script>
             <title>SIVO Votacion</title>
         </head>
         <body onload="requestOpciones()">
         <jsp:include page="templates/header.jsp"></jsp:include>
 
-        <div id="form-voto" class="card"></div>
-        <p id="res"></p>
+        <div id="form-voto" class="form-voto"></div>
 
         <jsp:include page="templates/footer.jsp"></jsp:include>
     </body>

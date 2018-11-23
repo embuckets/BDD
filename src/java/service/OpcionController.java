@@ -28,7 +28,7 @@ public class OpcionController {
         ResultSet resultSet = null;
         Connection conn = null;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(url);
             preparedStatement = conn.prepareStatement("select * from opcion where id_encuesta=?");//and cierra between now() - interval 7 day and now()
             preparedStatement.setInt(1, idEncuesta);

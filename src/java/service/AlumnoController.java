@@ -25,7 +25,7 @@ public class AlumnoController {
         ResultSet resultSet = null;
         Connection conn = null;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(url);
             preparedStatement = conn.prepareStatement("select * from alumno where matricula =?");
             preparedStatement.setString(1, matricula);

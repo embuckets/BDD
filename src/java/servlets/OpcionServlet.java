@@ -5,6 +5,7 @@
  */
 package servlets;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dominio.Encuesta;
 import java.io.IOException;
@@ -64,7 +65,9 @@ public class OpcionServlet extends HttpServlet {
         Encuesta encuesta = new EncuestaController().getEncuestaById(encuestaId);
         encuesta.setOpciones(new OpcionController().getOpcionesByIdEncuesta(encuestaId));
         ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(JsonGenerator.Feature.WRITE_NUMBERS_AS_STRINGS);
         String jsonString = mapper.writeValueAsString(encuesta);
+        response.setContentType("application/json;charset=UTF-8");
         try (PrintWriter writer = response.getWriter()) {
             writer.write(jsonString);
         }
