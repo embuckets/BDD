@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<% String root = getServletContext().getContextPath(); %>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -17,7 +18,7 @@
 <body>
     <header>
         <div class="topnav">
-            <a class="active center" href="/BDD">SIVO</a>
+            <a class="active center" href=<%=root%>>SIVO</a>
         </div>
     </header>
     <main>

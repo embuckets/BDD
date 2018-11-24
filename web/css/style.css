@@ -210,6 +210,10 @@ body {
 
 }
 
+.text-bold {
+    font-size: larger;
+    font-weight: bold;
+}
 .container-card-radio {
     padding: 10px;
 }

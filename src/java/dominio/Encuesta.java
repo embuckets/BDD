@@ -23,6 +23,15 @@ public class Encuesta {
     private LocalDateTime cierra;
     private int idUnidad;
     private List<Opcion> opciones;
+    private Opcion votado;
+
+    public Opcion getVotado() {
+        return votado;
+    }
+
+    public void setVotado(Opcion votado) {
+        this.votado = votado;
+    }
 
     public Encuesta(int idEncuesta, String titulo, String descripcion, LocalDateTime abre, LocalDateTime cierra, int idUnidad) {
         this.idEncuesta = idEncuesta;
