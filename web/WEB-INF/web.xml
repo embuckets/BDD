@@ -9,12 +9,20 @@
         <servlet-class>servlets.EncuestaServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>OpcionServlet</servlet-name>
+        <servlet-class>servlets.OpcionServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>VotacionServlet</servlet-name>
+        <servlet-class>servlets.VotacionServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>HomeServlet</servlet-name>
         <jsp-file>/home.jsp</jsp-file>
     </servlet>
     <servlet>
-        <servlet-name>OpcionServlet</servlet-name>
-        <servlet-class>servlets.OpcionServlet</servlet-class>
+        <servlet-name>LogOutServlet</servlet-name>
+        <servlet-class>servlets.LogOutServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LogInServlet</servlet-name>
@@ -25,12 +33,20 @@
         <url-pattern>/encuesta</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>OpcionServlet</servlet-name>
+        <url-pattern>/opcion</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>VotacionServlet</servlet-name>
+        <url-pattern>/votar</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/home</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>OpcionServlet</servlet-name>
-        <url-pattern>/opcion</url-pattern>
+        <servlet-name>LogOutServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

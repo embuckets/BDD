@@ -73,18 +73,18 @@ function buildCard(encuesta) {
     cardButton.value = "Votar";
     cardButton.className = "card-button";
 
-    var form = document.createElement("form");
-    form.method = "POST";
-    form.action = "votar";
+    // var form = document.createElement("form");
+    // form.method = "POST";
+    // form.action = "votar";
     var hidden = document.createElement("input");
     hidden.type = "hidden";
     hidden.name = "encuestaId";
     hidden.value = encuesta.id;
 
-    form.appendChild(cardTitle);
-    form.appendChild(cardText);
-    form.appendChild(cardAbre);
-    form.appendChild(cardCierra);
+    cardDiv.appendChild(cardTitle);
+    cardDiv.appendChild(cardText);
+    cardDiv.appendChild(cardAbre);
+    cardDiv.appendChild(cardCierra);
 
     var cardSelect = document.createElement("div");
     // cardSelect.name = "opciones";
@@ -96,7 +96,7 @@ function buildCard(encuesta) {
         var opcion = encuesta.opciones[i];
         //opcion 2
         var radio = createRadio(opcion);
-        form.appendChild(radio);
+        cardSelect.appendChild(radio);
 
         //opcion 1
         // var radioNode = document.createElement("input");
@@ -118,10 +118,11 @@ function buildCard(encuesta) {
     }
 
     // form.appendChild(cardSelect);
-    form.appendChild(cardButton);
-    form.appendChild(hidden);
+    cardDiv.appendChild(cardSelect);
+    cardDiv.appendChild(cardButton);
+    cardDiv.appendChild(hidden);
 
-    cardDiv.appendChild(form);
+    // cardDiv.appendChild(form);
     return cardDiv;
 }
 

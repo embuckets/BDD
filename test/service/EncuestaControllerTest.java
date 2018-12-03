@@ -11,7 +11,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import dominio.Alumno;
 import dominio.Encuesta;
+import dominio.Usuario;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -111,6 +113,32 @@ public class EncuestaControllerTest {
         Encuesta result = instance.getEncuestaById(idEncuesta);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
+    }
+
+    /**
+     * Test of getEncuestaById method, of class EncuestaController.
+     */
+    @Test
+    public void testGetEncuestasYVoto() {
+        System.out.println("getEncuestasById");
+        Alumno usuario = new Alumno();
+        usuario.setIdUnidad(2);
+        usuario.setMatricula("2143032439");
+        EncuestaController encuestaController = new EncuestaController();
+        List<Encuesta> encuestas = encuestaController.getEncuestasByIdUnidad(usuario.getIdUnidad());
+        VotacionController votacionController = new VotacionController();
+        for (Encuesta encuesta : encuestas){
+            encuesta.setVotado(votacionController.getOpcion(encuesta.getIdEncuesta(), usuario.getMatricula()));
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(JsonGenerator.Feature.WRITE_NUMBERS_AS_STRINGS);
+        try {
+            String jsonString = mapper.writeValueAsString(encuestas);
+            System.out.println(jsonString);
+            // TODO review the generated test code and remove the default call to fail.
+        } catch (JsonProcessingException ex) {
+            ex.printStackTrace();
+        }
     }
 
 }

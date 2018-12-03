@@ -6,12 +6,18 @@ function Encuesta(id, titulo, descripcion, idUnidad) {
     this.abre = null;
     this.cierra = null;
     this.idUnidad = idUnidad;
+    this.votado = null;
     this.setAbre = function (year, month, day, hour, minute, second) {
         this.abre = new Date(year, month, day, hour, minute, second);
     };
     this.setCierra = function (year, month, day, hour, minute, second) {
         this.cierra = new Date(year, month, day, hour, minute, second);
     };
+}
+function Opcion(idOpcion, idEncuesta, opcion) {
+    this.idOpcion = idOpcion;
+    this.idEncuesta = idEncuesta;
+    this.opcion = opcion;
 }
 
 function buildEncuesta(jsonObj) {
@@ -22,6 +28,9 @@ function buildEncuesta(jsonObj) {
     var encuesta = new Encuesta(idEncuesta, titulo, descripcion, idUnidad);
     encuesta.setAbre(jsonObj.abre.year, jsonObj.abre.monthValue, jsonObj.abre.dayOfMonth, jsonObj.abre.hour, jsonObj.abre.minute, jsonObj.abre.second);
     encuesta.setCierra(jsonObj.cierra.year, jsonObj.cierra.monthValue, jsonObj.cierra.dayOfMonth, jsonObj.cierra.hour, jsonObj.cierra.minute, jsonObj.cierra.second);
+    if (jsonObj.votado) {
+        encuesta.votado = new Opcion(jsonObj.votado.idOpcion, jsonObj.votado.idEncuesta, jsonObj.votado.opcion);
+    }
     return encuesta;
 }
 
@@ -62,7 +71,7 @@ function buildCard(encuesta) {
     cardButton.innerHTML = "Votar";
 
     var form = document.createElement("form");
-    form.method  = "POST";
+    form.method = "POST";
     form.action = "encuesta";
     var hidden = document.createElement("input");
     hidden.type = "hidden";
@@ -73,6 +82,12 @@ function buildCard(encuesta) {
     form.appendChild(cardText);
     form.appendChild(cardAbre);
     form.appendChild(cardCierra);
+    if (encuesta.votado) {
+        var cardVotado = document.createElement("p");
+        cardVotado.className = "text-bold";
+        cardVotado.innerHTML = "Votaste: " + encuesta.votado.opcion;
+        form.appendChild(cardVotado);
+    }
     form.appendChild(cardButton);
     form.appendChild(hidden);
 
