@@ -329,5 +329,6 @@ INSERT INTO `sivo`.`opcion` (`id_opcion`, `id_encuesta`, `opcion`) VALUES (defau
 
 COMMIT;
 
-GRANT ALL PRIVILEGES ON sivo.* to emilio@'localhost' IDENTIFIED BY 'emilio';
+CREATE USER 'embuckets'@'localhost' IDENTIFIED BY 'bddtest00';
+GRANT ALL PRIVILEGES ON sivo.* to embuckets@'localhost' IDENTIFIED BY 'bddtest00';
 -- GRANT ALL PRIVILEGES ON sivo.* to laura@'localhost' IDENTIFIED BY 'laura';

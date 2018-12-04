@@ -22,7 +22,7 @@ import java.util.List;
 public class OpcionController {
 
     public List<Opcion> getOpcionesByIdEncuesta(int idEncuesta) {
-        String url = new LocalURL().getURL();
+        String url = new JdbcUrl().getURL();
         List<Opcion> result = new ArrayList<>();
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;

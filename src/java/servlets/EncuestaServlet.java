@@ -72,8 +72,9 @@ public class EncuestaServlet extends HttpServlet {
         EncuestaController encuestaController = new EncuestaController();
         List<Encuesta> encuestas = encuestaController.getEncuestasByIdUnidad(usuario.getIdUnidad());
         VotacionController votacionController = new VotacionController();
+        //recupera la opcion por la cual voto el alumno si es que existe
         for (Encuesta encuesta : encuestas){
-            encuesta.setVotado(votacionController.getOpcion(encuesta.getIdEncuesta(), usuario.getMatricula()));
+            encuesta.setVotado(votacionController.getOpcion(encuesta.getIdEncuesta(), usuario.getMatricula(), usuario.getIdUnidad()));
         }
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(JsonGenerator.Feature.WRITE_NUMBERS_AS_STRINGS);

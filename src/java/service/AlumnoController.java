@@ -11,6 +11,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -19,53 +21,64 @@ import java.sql.SQLException;
 public class AlumnoController {
 
     public Alumno getAlumnoByMatricula(String matricula) {
-        String url = new LocalURL().getURL();
+        PartitionRules partitionRules = new PartitionRules();
+        List<String> urls = partitionRules.getUrls("alumno", PartitionRules.DEFAULT_ID);
         Alumno result = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         Connection conn = null;
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(url);
-            preparedStatement = conn.prepareStatement("select * from alumno where matricula =?");
-            preparedStatement.setString(1, matricula);
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                result = new Alumno();
-                result.setMatricula(matricula);
-                result.setNombre(resultSet.getString("nombre"));
-                result.setPaterno(resultSet.getString("paterno"));
-                result.setMaterno(resultSet.getString("materno"));
-                result.setIdDivision(resultSet.getInt("id_division"));
-                result.setIdUnidad(resultSet.getInt("id_unidad"));
-            }
-
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-
-        } catch (SQLException ex) {
-            //TODO: checar si la base de datos esta desconectada para intentar las otras
-            ex.printStackTrace();
-        } finally {
-            if (resultSet != null) {
-                try {
-                    resultSet.close();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
+        for (Iterator<String> iterator = urls.iterator(); iterator.hasNext();) {
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                String url = iterator.next();
+                conn = DriverManager.getConnection(url);
+                preparedStatement = conn.prepareStatement("select * from alumno where matricula =?");
+                preparedStatement.setString(1, matricula);
+                resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {
+                    result = new Alumno();
+                    result.setMatricula(matricula);
+                    result.setNombre(resultSet.getString("nombre"));
+                    result.setPaterno(resultSet.getString("paterno"));
+                    result.setMaterno(resultSet.getString("materno"));
+                    result.setIdDivision(resultSet.getInt("id_division"));
+                    result.setIdUnidad(resultSet.getInt("id_unidad"));
+                    break;
                 }
-            }
-            if (preparedStatement != null) {
-                try {
-                    preparedStatement.close();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
+
+            } catch (ClassNotFoundException ex) {
+                ex.printStackTrace();
+                //throw exception
+                break;
+
+            } catch (SQLException ex) {
+                if (!iterator.hasNext()) {
+                    //thow exception
+                    break;
                 }
-            }
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
+                //TODO: checar si la base de datos esta desconectada para intentar las otras
+                ex.printStackTrace();
+            } finally {
+                if (resultSet != null) {
+                    try {
+                        resultSet.close();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+                if (preparedStatement != null) {
+                    try {
+                        preparedStatement.close();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+                if (conn != null) {
+                    try {
+                        conn.close();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
                 }
             }
         }

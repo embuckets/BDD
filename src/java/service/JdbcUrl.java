@@ -16,7 +16,7 @@ import java.util.Properties;
  *
  * @author emilio
  */
-public class LocalURL {
+public class JdbcUrl {
 
     private String protocol;
     private String host;
@@ -25,17 +25,17 @@ public class LocalURL {
     private String user;
     private String password;
 
-    public LocalURL() {
-        init();
+    public JdbcUrl(String archivo) {
+        init(archivo);
     }
 
     public String getURL() {
         return protocol + host + ":" + port + "/" + database + "?user=" + user + "&password=" + password;
     }
 
-    public void init() {
+    public void init(String archivo) {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        InputStream input = classLoader.getResourceAsStream("resources/database-local.xml");
+        InputStream input = classLoader.getResourceAsStream("resources/" + archivo);
 // ...
         Properties props = new Properties();
         try {

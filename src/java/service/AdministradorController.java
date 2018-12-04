@@ -19,7 +19,7 @@ import java.sql.SQLException;
 public class AdministradorController {
 
     public Administrador getAdministradorByMatricula(String matricula) {
-        String url = new LocalURL().getURL();
+        String url = new JdbcUrl().getURL();
         Administrador result = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;

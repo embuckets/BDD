@@ -23,7 +23,10 @@ import java.util.Map;
  * @author emilio
  */
 public class PartitionRules {
-
+    public static String DB_LOCAL = "database-local.xml";
+    public static String DB_NUBE = "database-nube.xml";
+    public static String DEFAULT_ID = "1";
+    
     private Map<String, String> map;
 
     public PartitionRules() {
@@ -33,7 +36,7 @@ public class PartitionRules {
 
     private void init() {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        URL url = classLoader.getResource("resources/test-part.json");
+        URL url = classLoader.getResource("resources/partitions.json");
         File file = new File(url.getFile());
         try (FileReader reader = new FileReader(file)) {
             char[] contents = new char[(int) file.length()];
@@ -52,7 +55,7 @@ public class PartitionRules {
         return map;
     }
 
-    public List<String> getURL(String tabla, String idUnidad) {
+    private List<String> getPropertiesFiles(String tabla, String idUnidad) {
         ObjectMapper mapper = new ObjectMapper();
         List<String> result = new ArrayList<>();
         try {
@@ -82,6 +85,16 @@ public class PartitionRules {
 
         } catch (IOException ex) {
             ex.printStackTrace();
+        }
+        return result;
+    }
+
+    public List<String> getUrls(String tabla, String idUnidad) {
+        List<String> propertiesFiles = getPropertiesFiles(tabla, idUnidad);
+        List<String> result = new ArrayList<>();
+        for (String archivo : propertiesFiles) {
+            JdbcUrl jdbcUrl = new JdbcUrl(archivo);
+            result.add(jdbcUrl.getURL());
         }
         return result;
     }
