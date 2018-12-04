@@ -77,11 +77,11 @@ public class VotacionServlet extends HttpServlet {
         int idOpcion = Integer.valueOf(request.getParameter("opciones"));
         Usuario user = (Usuario) request.getSession().getAttribute("user");
         VotacionController votacionController = new VotacionController();
-        Opcion opcion = votacionController.getOpcion(idEncuesta, user.getMatricula());
+        Opcion opcion = votacionController.getOpcionVotada(idEncuesta, user.getMatricula(), user.getIdUnidad());
         if (opcion != null ){
-            votacionController.updateVotacion(idEncuesta, idOpcion, user.getMatricula());
+            votacionController.updateVotacion(idEncuesta, idOpcion, user.getMatricula(), user.getIdUnidad());
         } else{
-            votacionController.saveVotacion(idEncuesta, idOpcion, user.getMatricula());
+            votacionController.saveVotacion(idEncuesta, idOpcion, user.getMatricula(), user.getIdUnidad());
         }
         request.getSession().removeAttribute("encuestaId");
         response.sendRedirect(getServletContext().getContextPath() + "/home");

@@ -74,7 +74,7 @@ public class EncuestaServlet extends HttpServlet {
         VotacionController votacionController = new VotacionController();
         //recupera la opcion por la cual voto el alumno si es que existe
         for (Encuesta encuesta : encuestas){
-            encuesta.setVotado(votacionController.getOpcion(encuesta.getIdEncuesta(), usuario.getMatricula(), usuario.getIdUnidad()));
+            encuesta.setVotado(votacionController.getOpcionVotada(encuesta.getIdEncuesta(), usuario.getMatricula(), usuario.getIdUnidad()));
         }
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(JsonGenerator.Feature.WRITE_NUMBERS_AS_STRINGS);

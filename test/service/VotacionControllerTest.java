@@ -50,7 +50,7 @@ public class VotacionControllerTest {
         int idEncuesta = 1;
         int idOpcion = 1;
         String matricula = "2143032439";
-        boolean result = votacionControllerTested.saveVotacion(idEncuesta, idOpcion, matricula);
+        boolean result = votacionControllerTested.saveVotacion(idEncuesta, idOpcion, matricula, 1);
         assertEquals(true, result);
         // TODO review the generated test code and remove the default call to fail.
     }
@@ -64,7 +64,7 @@ public class VotacionControllerTest {
         int idEncuesta = 1;
         int idOpcion = 2;
         String matricula = "2143032439";
-        boolean result = votacionControllerTested.updateVotacion(idEncuesta, idOpcion, matricula);
+        boolean result = votacionControllerTested.updateVotacion(idEncuesta, idOpcion, matricula, 1);
         assertEquals(true, result);
     }
 
@@ -77,7 +77,7 @@ public class VotacionControllerTest {
         int idEncuesta = 1;
         String matricula = "2143032439";
         boolean expResult = true;
-        Opcion result = votacionControllerTested.getOpcion(idEncuesta, matricula);
+        Opcion result = votacionControllerTested.getOpcionVotada(idEncuesta, matricula, 1);
         assertNotNull(result);
         // TODO review the generated test code and remove the default call to fail.
     }
@@ -91,7 +91,7 @@ public class VotacionControllerTest {
         int idEncuesta = 2;
         String matricula = "2143032439";
         boolean expResult = false;
-        Opcion result = votacionControllerTested.getOpcion(idEncuesta, matricula);
+        Opcion result = votacionControllerTested.getOpcionVotada(idEncuesta, matricula, 2);
         assertNull(result);
         // TODO review the generated test code and remove the default call to fail.
     }

@@ -14,6 +14,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -21,7 +23,7 @@ import java.util.List;
  */
 public class VotacionController {
 
-    public Opcion getOpcion(int idEncuesta, String matricula, int idUnidad) {
+    public Opcion getOpcionVotada(int idEncuesta, String matricula, int idUnidad) {
         PartitionRules partitionRules = new PartitionRules();
         List<String> urls = partitionRules.getUrls("opcion", String.valueOf(idUnidad));
         PreparedStatement preparedStatement = null;
@@ -72,79 +74,57 @@ public class VotacionController {
     }
 
     //TODO
-    public boolean saveVotacion(int idEncuesta, int idOpcion, String matricula/*int iduNidad*/) {
+    public boolean saveVotacion(int idEncuesta, int idOpcion, String matricula, int idUnidad) {
         PartitionRules partitionRules = new PartitionRules();
-        List<String> urls = partitionRules.getUrls("votacion", PartitionRules.DEFAULT_ID);
+        List<String> urls = partitionRules.getUrls("votacion", String.valueOf(idUnidad));
         PreparedStatement preparedStatement = null;
         int result;
         boolean success = false;
-        Connection conn = null;
+//        Connection conn = null;
         List<Connection> conns = new ArrayList<>();
-        for (Iterator<String> iterator = urls.iterator(); iterator.hasNext();) {
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            for (Iterator<String> iterator = urls.iterator(); iterator.hasNext();) {
                 String url = iterator.next();
-                conn = DriverManager.getConnection(url);
+                Connection conn = DriverManager.getConnection(url);
+                conns.add(conn);
+            }
+            for (Connection conn : conns) {
                 conn.setAutoCommit(false);
                 preparedStatement = conn.prepareStatement("insert into votacion values(?,?,?,default)");//and cierra between now() - interval 7 day and now()
                 preparedStatement.setInt(1, idEncuesta);
                 preparedStatement.setString(2, matricula);
                 preparedStatement.setInt(3, idOpcion);
                 result = preparedStatement.executeUpdate();
-                if (result == 1) {
-                    success = true;
-                }
-
-            } catch (ClassNotFoundException ex) {
-                ex.printStackTrace();
-
-            } catch (SQLException ex) {
-                //TODO: checar si la base de datos esta desconectada para intentar las otras
-                ex.printStackTrace();
-            } finally {
-
-                if (preparedStatement != null) {
-                    try {
-                        preparedStatement.close();
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-                if (conn != null) {
-                    try {
-                        conn.close();
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
-                    }
-                }
+                //puede result ser otra cosa sin ser exception??
+//                if (result == 1) {
+//                    success = true;
+//                }
             }
-        }
-        return success;
-    }
-
-    public boolean updateVotacion(int idEncuesta, int idOpcion, String matricula/* idUnidad */) {
-        PartitionRules partitionRules = new PartitionRules();
-        List<String> urls = partitionRules.getUrls("votacion", /* idUniad */ PartitionRules.DEFAULT_ID);
-        PreparedStatement preparedStatement = null;
-        int result;
-        boolean success = false;
-        Connection conn = null;
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(url);
-            preparedStatement = conn.prepareStatement("update votacion set id_opcion=?, emision = current_timestamp() where id_encuesta=? and matricula=?");
-            preparedStatement.setInt(1, idOpcion);
-            preparedStatement.setInt(2, idEncuesta);
-            preparedStatement.setString(3, matricula);
-            result = preparedStatement.executeUpdate();
-            if (result == 1) {
-                success = true;
+            //si llega aqui significa que no hubo exepciones
+            for (Connection conn : conns) {
+                conn.commit();
+                conn.setAutoCommit(true);
             }
+            success = true;
 
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
 
         } catch (SQLException ex) {
+            //sqlstate = 23000 -> duplicate entry
+            for (Connection conn : conns) {
+                if (conn != null) {
+                    try {
+                        if (!conn.getAutoCommit()) {
+                            conn.rollback();
+                            conn.setAutoCommit(true);
+                        }
+                    } catch (SQLException ex1) {
+                        ex1.printStackTrace();
+                    }
+                }
+            }
             //TODO: checar si la base de datos esta desconectada para intentar las otras
             ex.printStackTrace();
         } finally {
@@ -156,14 +136,89 @@ public class VotacionController {
                     ex.printStackTrace();
                 }
             }
-            if (conn != null) {
+            for (Connection conn : conns) {
+                if (conn != null) {
+                    try {
+                        conn.close();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        return success;
+    }
+
+    public boolean updateVotacion(int idEncuesta, int idOpcion, String matricula, int idUnidad/* idUnidad */) {
+        PartitionRules partitionRules = new PartitionRules();
+        List<String> urls = partitionRules.getUrls("votacion", String.valueOf(idUnidad));
+        PreparedStatement preparedStatement = null;
+        int result;
+        boolean success = false;
+//        Connection conn = null;
+        List<Connection> conns = new ArrayList<>();
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            for (Iterator<String> iterator = urls.iterator(); iterator.hasNext();) {
+                String url = iterator.next();
+                Connection conn = DriverManager.getConnection(url);
+                conns.add(conn);
+            }
+            for (Connection conn : conns) {
+                conn.setAutoCommit(false);
+                preparedStatement = conn.prepareStatement("update votacion set id_opcion=?, emision = current_timestamp() where id_encuesta=? and matricula=?");
+                preparedStatement.setInt(1, idOpcion);
+                preparedStatement.setInt(2, idEncuesta);
+                preparedStatement.setString(3, matricula);
+                result = preparedStatement.executeUpdate();
+                //puede result ser otra cosa sin ser exception??
+//                if (result == 1) {
+//                    success = true;
+//                }
+            }
+            //si llega aqui significa que no hubo exepciones
+            for (Connection conn : conns) {
+                conn.commit();
+                conn.setAutoCommit(true);
+            }
+            success = true;
+
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+
+        } catch (SQLException ex) {
+            for (Connection conn : conns) {
+                if (conn != null) {
+                    try {
+                        conn.rollback();
+                    } catch (SQLException ex1) {
+                        ex1.printStackTrace();
+                    }
+                }
+            }
+            //TODO: checar si la base de datos esta desconectada para intentar las otras
+            ex.printStackTrace();
+        } finally {
+
+            if (preparedStatement != null) {
                 try {
-                    conn.close();
+                    preparedStatement.close();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
             }
+            for (Connection conn : conns) {
+                if (conn != null) {
+                    try {
+                        conn.close();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
         }
+
         return success;
     }
 

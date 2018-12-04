@@ -14,6 +14,19 @@
             ]
         },
         {
+            "tabla": "administrador",
+            "fragmentos": [
+                {
+                    "id_unidad": "1",
+                    "url": ["database-local.xml", "database-nube.xml"]
+                },
+                {
+                    "id_unidad": "2",
+                    "url": ["database-nube.xml"]
+                }
+            ]
+        },
+        {
             "tabla": "login",
             "fragmentos": [
                 {

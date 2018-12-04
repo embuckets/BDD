@@ -128,7 +128,7 @@ public class EncuestaControllerTest {
         List<Encuesta> encuestas = encuestaController.getEncuestasByIdUnidad(usuario.getIdUnidad());
         VotacionController votacionController = new VotacionController();
         for (Encuesta encuesta : encuestas){
-            encuesta.setVotado(votacionController.getOpcion(encuesta.getIdEncuesta(), usuario.getMatricula()));
+            encuesta.setVotado(votacionController.getOpcionVotada(encuesta.getIdEncuesta(), usuario.getMatricula(), usuario.getIdUnidad()));
         }
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(JsonGenerator.Feature.WRITE_NUMBERS_AS_STRINGS);

@@ -8,6 +8,7 @@ package servlets;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dominio.Encuesta;
+import dominio.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -49,7 +50,6 @@ public class OpcionServlet extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -63,7 +63,8 @@ public class OpcionServlet extends HttpServlet {
             throws ServletException, IOException {
         int encuestaId = (int) request.getSession().getAttribute("encuestaId");
         Encuesta encuesta = new EncuestaController().getEncuestaById(encuestaId);
-        encuesta.setOpciones(new OpcionController().getOpcionesByIdEncuesta(encuestaId));
+        Usuario usuario = (Usuario)request.getSession().getAttribute("user");
+        encuesta.setOpciones(new OpcionController().getOpcionesByIdEncuesta(encuestaId, usuario.getIdUnidad()));
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(JsonGenerator.Feature.WRITE_NUMBERS_AS_STRINGS);
         String jsonString = mapper.writeValueAsString(encuesta);
