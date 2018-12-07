@@ -5,28 +5,27 @@
  */
 package servlets;
 
-import dominio.Administrador;
-import dominio.Alumno;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import dominio.Encuesta;
 import dominio.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.RequestDispatcher;
+import java.util.List;
+import java.util.Map.Entry;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import service.AdministradorController;
-import service.AlumnoController;
-import service.LogInController;
+import service.EncuestaController;
+import service.OpcionController;
+import service.ResultadoController;
 
 /**
  *
  * @author emilio
  */
-@WebServlet(name = "LogInController", urlPatterns = {"/LogInController"})
-public class LogInServlet extends HttpServlet {
+public class ResultadoServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -45,10 +44,10 @@ public class LogInServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LogInController</title>");
+            out.println("<title>Servlet ResultadoServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet LogInController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ResultadoServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -65,7 +64,18 @@ public class LogInServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        int encuestaId = (int) request.getSession().getAttribute("encuestaId");
+        Encuesta encuesta = new EncuestaController().getEncuestaById(encuestaId);
+        Usuario usuario = (Usuario)request.getSession().getAttribute("user");
+        encuesta.setOpciones(new ResultadoController().getResultadosDeEncuesta(encuestaId, usuario.getIdUnidad()));
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(JsonGenerator.Feature.WRITE_NUMBERS_AS_STRINGS);
+        String jsonString = mapper.writeValueAsString(encuesta);
+        response.setContentType("application/json;charset=UTF-8");
+        try (PrintWriter writer = response.getWriter()) {
+            writer.write(jsonString);
+        }
+        
     }
 
     /**
@@ -79,32 +89,7 @@ public class LogInServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String matricula = request.getParameter("uname");
-        String password = request.getParameter("psw");
-
-        HttpSession session = request.getSession();
-        LogInController logInController = new LogInController();
-        String rol = logInController.logIn(matricula, password);
-        String nextURL = "/index.jsp";
-        //si es usuario valido, es decir, rol es alumno o admin redirige a su home
-        if (rol != null) {
-            // agrega al alumno o admin a la session 
-            if (rol.equalsIgnoreCase("alumno")) {
-                AlumnoController alumnoController = new AlumnoController();
-                Alumno alumno = alumnoController.getAlumnoByMatricula(matricula);
-                session.setAttribute("user", alumno);
-            } else if (rol.equalsIgnoreCase("admin")) {
-                AdministradorController administradorController = new AdministradorController();
-                Administrador admin = administradorController.getAdministradorByMatricula(matricula);
-                session.setAttribute("user", admin);
-            }
-            session.setAttribute("rol", rol);
-            nextURL = "/home.jsp";
-        }
-//        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextURL);
-//        dispatcher.forward(request, response);
-
-        response.sendRedirect(getServletContext().getContextPath() + nextURL);
+        processRequest(request, response);
     }
 
     /**

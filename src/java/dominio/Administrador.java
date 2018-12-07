@@ -11,7 +11,7 @@ import java.util.Objects;
  *
  * @author emilio
  */
-public class Administrador {
+public class Administrador implements Usuario {
 
     private String matricula;
     private String nombre;
@@ -26,6 +26,7 @@ public class Administrador {
     public Administrador() {
     }
 
+    @Override
     public String getMatricula() {
         return matricula;
     }
@@ -34,6 +35,7 @@ public class Administrador {
         this.matricula = matricula;
     }
 
+    @Override
     public String getNombre() {
         return nombre;
     }
@@ -42,6 +44,7 @@ public class Administrador {
         this.nombre = nombre;
     }
 
+    @Override
     public int getIdUnidad() {
         return idUnidad;
     }

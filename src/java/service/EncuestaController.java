@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class EncuestaController {
 
-    public List<Encuesta> getEncuestasByIdUnidad(int idUnidad) {
+    public List<Encuesta> getEncuestasByIdUnidad(int idUnidad, String abre, String cierra) {
         PartitionRules partitionRules = new PartitionRules();
         List<String> urls = partitionRules.getUrls("encuesta", String.valueOf(idUnidad));
         List<Encuesta> result = new ArrayList<>();
@@ -33,7 +33,7 @@ public class EncuestaController {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 String url = iterator.next();
                 conn = DriverManager.getConnection(url);
-                preparedStatement = conn.prepareStatement("select * from encuesta where id_unidad=? and cierra between now() - interval 7 day and now() + interval 1 day");//
+                preparedStatement = conn.prepareStatement("select * from encuesta where id_unidad=? and abre > '" + abre + "' and cierra < '" + cierra + " 23:59:59'");
                 preparedStatement.setInt(1, idUnidad);
                 resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()) {

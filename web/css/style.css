@@ -142,6 +142,7 @@ body {
     border: none;
     cursor: pointer;
     width: 100%;
+    font-size: 1rem;
 }
 
 .from-submit:hover {
@@ -153,7 +154,7 @@ body {
     margin-left: auto;
     margin-right: auto;
     margin-top: 30px;
-    
+
 }
 
 .grid-container {
@@ -223,4 +224,75 @@ body {
     margin-left: auto;
     margin-right: auto;
     max-width: 70vw;
+}
+
+.range {
+    max-width: 80vw;
+    margin: 30px auto;
+}
+
+.date-range-input {
+    line-height: 20px;
+    font-size: 1rem;
+    padding: 5px 5px;
+    margin-right: 12px;
+}
+.range-btn {
+    background-color: #4CAF50;
+    padding: 6px 18px;
+    border: none;
+    text-align: center;
+    cursor: pointer;
+    line-height: 20px;
+    font-size: 1rem;
+}
+
+.justify {
+    margin: 0px auto;
+    max-width: 70vw;
+    padding-top: 10px;
+}
+
+.table-res {
+    border-collapse: collapse;
+    border: 1px solid lightgray;
+    width: 100%;
+    font-size: 1rem;
+}
+
+.table-body td {
+    text-align: center;
+    padding: 8px;
+}
+.table-res th {
+    background-color: #4CAF50;
+    color: white;
+    padding: 8px;
+}
+.table-body tr:nth-child(even){
+    background-color: #cecece;
+}
+.table-body tr:nth-child(odd){
+    background-color: white;
+}
+.table-body tr:hover {
+    background-color: rgb(175, 175, 175);
+}
+
+.return-btn {
+    background-color: #4CAF50;
+    padding: 10px 18px;
+    border: none;
+    text-align: center;
+    cursor: pointer;
+    line-height: 20px;
+    font-size: 17px;
+    color: white;
+    display: block;
+    margin-top: 40px;
+    text-decoration: none;
+    max-width: 80px;
+}
+.return-btn:hover {
+    opacity: 0.8;
 }

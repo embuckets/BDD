@@ -1,12 +1,16 @@
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
-function Encuesta(id, titulo, descripcion, idUnidad) {
+
+function Encuesta(id, titulo, descripcion) {
     this.id = id;
     this.titulo = titulo;
     this.descripcion = descripcion;
     this.abre = null;
     this.cierra = null;
-    this.idUnidad = idUnidad;
-    this.votado = null;
     this.setAbre = function (year, month, day, hour, minute, second) {
         this.abre = new Date(year, month, day, hour, minute, second);
     };
@@ -20,25 +24,16 @@ function Encuesta(id, titulo, descripcion, idUnidad) {
         this.cierra = new Date(date);
     };
 }
-function Opcion(idOpcion, idEncuesta, opcion) {
-    this.idOpcion = idOpcion;
-    this.idEncuesta = idEncuesta;
-    this.opcion = opcion;
-}
 
 function buildEncuesta(jsonObj) {
-    var idEncuesta = jsonObj.idEncuesta;
+    var id_encuesta = jsonObj.id_encuesta;
     var titulo = jsonObj.titulo;
     var descripcion = jsonObj.descripcion;
-    var idUnidad = jsonObj.idUnidad;
-    var encuesta = new Encuesta(idEncuesta, titulo, descripcion, idUnidad);
+    var encuesta = new Encuesta(id_encuesta, titulo, descripcion);
     var abre = convertToLocalizedDateTime(jsonObj.abre.year, jsonObj.abre.monthValue, jsonObj.abre.dayOfMonth, jsonObj.abre.hour, jsonObj.abre.minute, jsonObj.abre.second);
     encuesta.setAbre(abre);
     var cierra = convertToLocalizedDateTime(jsonObj.cierra.year, jsonObj.cierra.monthValue, jsonObj.cierra.dayOfMonth, jsonObj.cierra.hour, jsonObj.cierra.minute, jsonObj.cierra.second);
     encuesta.setCierra(cierra);
-    if (jsonObj.votado) {
-        encuesta.votado = new Opcion(jsonObj.votado.idOpcion, jsonObj.votado.idEncuesta, jsonObj.votado.opcion);
-    }
     return encuesta;
 }
 
@@ -53,9 +48,7 @@ function display(jsonText) {
     while (container.lastChild) {
         container.removeChild(container.lastChild);
     }
-
     var jsonArray = JSON.parse(jsonText);
-    var encuestas = [];
     for (i in jsonArray) {
         var encuesta = buildEncuesta(jsonArray[i]);
         var card = buildCard(encuesta);
@@ -84,21 +77,15 @@ function buildCard(encuesta) {
 
     var cardButton = document.createElement("input");
     cardButton.type = "submit";
+    cardButton.value = "Resultados";
     cardButton.className = "card-button";
     if (encuesta.cierra > new Date()) {
-        cardButton.value = "Votar";
-
-    } else {
-        cardButton.value = "Resultados";
-
-    }
-    if (encuesta.abre > new Date()) {
-        cardButton.disabled = "true";
+        cardButton.disabled = true;
     }
 
     var form = document.createElement("form");
     form.method = "POST";
-    form.action = "encuesta";
+    form.action = "encuesta"
     var hidden = document.createElement("input");
     hidden.type = "hidden";
     hidden.name = "encuestaId";
@@ -108,19 +95,12 @@ function buildCard(encuesta) {
     form.appendChild(cardText);
     form.appendChild(cardAbre);
     form.appendChild(cardCierra);
-    if (encuesta.votado) {
-        var cardVotado = document.createElement("p");
-        cardVotado.className = "text-bold";
-        cardVotado.innerHTML = "Votaste: " + encuesta.votado.opcion;
-        form.appendChild(cardVotado);
-    }
     form.appendChild(cardButton);
     form.appendChild(hidden);
 
     cardDiv.appendChild(form);
     return cardDiv;
 }
-
 
 function requestEncuestas() {
     var xhttp = new XMLHttpRequest();
@@ -134,3 +114,4 @@ function requestEncuestas() {
     xhttp.open("GET", "encuesta?abre=" + abre + "&cierra=" + cierra, true);
     xhttp.send();
 }
+
