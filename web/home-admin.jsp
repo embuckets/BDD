@@ -13,6 +13,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <jsp:include page="templates/head.jsp"></jsp:include>
             <title>SIVO Home</title>
+            <script src="js/encuesta.js"></script>
             <script src="js/home-admin.js"></script>
         </head>
         <body onload="requestEncuestas()">
