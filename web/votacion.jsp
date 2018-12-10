@@ -14,6 +14,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <jsp:include page="templates/head.jsp"></jsp:include>
+            <script src="js/encuesta.js"></script>
             <script src="js/votacion.js"></script>
             <title>SIVO Votacion</title>
         </head>
