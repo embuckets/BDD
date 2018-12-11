@@ -59,7 +59,7 @@ public class OpcionControllerTest {
         List<Opcion> expResult = new ArrayList<>();
         expResult.add(opcionParoSi);
         expResult.add(opcionParoNo);
-        List<Opcion> result = opcionControllerTested.getOpcionesByIdEncuesta(idEncuesta);
+        List<Opcion> result = opcionControllerTested.getOpcionesByIdEncuesta(idEncuesta, 1);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
     }
@@ -74,7 +74,7 @@ public class OpcionControllerTest {
         List<Opcion> expResult = new ArrayList<>();
         expResult.add(opcionParoSi);
         expResult.add(opcionParoNo);
-        List<Opcion> result = opcionControllerTested.getOpcionesByIdEncuesta(idEncuesta);
+        List<Opcion> result = opcionControllerTested.getOpcionesByIdEncuesta(idEncuesta, 1);
         assertEquals(expResult, result);
         ObjectMapper mapper = new ObjectMapper();
         try {

@@ -5,9 +5,7 @@
  */
 package servlets;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import dominio.Encuesta;
+import dominio.Opcion;
 import dominio.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,14 +13,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import service.EncuestaController;
-import service.OpcionController;
+import service.VotacionController;
 
 /**
  *
  * @author emilio
  */
-public class OpcionServlet extends HttpServlet {
+public class VotacionServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,10 +38,10 @@ public class OpcionServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet OpcionServlet</title>");
+            out.println("<title>Servlet VotacionServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet OpcionServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet VotacionServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,18 +58,7 @@ public class OpcionServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int encuestaId = (int) request.getSession().getAttribute("encuestaId");
-        Encuesta encuesta = new EncuestaController().getEncuestaById(encuestaId);
-        Usuario usuario = (Usuario)request.getSession().getAttribute("user");
-        encuesta.setOpciones(new OpcionController().getOpcionesByIdEncuesta(encuestaId, usuario.getIdUnidad()));
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.enable(JsonGenerator.Feature.WRITE_NUMBERS_AS_STRINGS);
-        String jsonString = mapper.writeValueAsString(encuesta);
-        response.setContentType("application/json;charset=UTF-8");
-        try (PrintWriter writer = response.getWriter()) {
-            writer.write(jsonString);
-        }
-        //TODO: convertir a JSON 
+        processRequest(request, response);
     }
 
     /**
@@ -86,7 +72,19 @@ public class OpcionServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+//        int idEncuesta = Integer.valueOf(request.getParameter("encuestaId"));
+        int idEncuesta = (int) request.getSession().getAttribute("encuestaId");
+        int idOpcion = Integer.valueOf(request.getParameter("opciones"));
+        Usuario user = (Usuario) request.getSession().getAttribute("user");
+        VotacionController votacionController = new VotacionController();
+        Opcion opcion = votacionController.getOpcionVotada(idEncuesta, user.getMatricula(), user.getIdUnidad());
+        if (opcion != null ){
+            votacionController.updateVotacion(idEncuesta, idOpcion, user.getMatricula(), user.getIdUnidad());
+        } else{
+            votacionController.saveVotacion(idEncuesta, idOpcion, user.getMatricula(), user.getIdUnidad());
+        }
+        request.getSession().removeAttribute("encuestaId");
+        response.sendRedirect(getServletContext().getContextPath() + "/home");
     }
 
     /**

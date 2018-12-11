@@ -329,5 +329,12 @@ INSERT INTO `sivo`.`opcion` (`id_opcion`, `id_encuesta`, `opcion`) VALUES (defau
 
 COMMIT;
 
-GRANT ALL PRIVILEGES ON sivo.* to emilio@'localhost' IDENTIFIED BY 'emilio';
--- GRANT ALL PRIVILEGES ON sivo.* to laura@'localhost' IDENTIFIED BY 'laura';
+-- para base local
+-- descomentar lo siguiente
+-- CREATE USER 'emilio'@'localhost' IDENTIFIED BY 'emilio';
+-- GRANT ALL PRIVILEGES ON sivo.* to emilio@'localhost' IDENTIFIED BY 'emilio';
+
+-- para base nube
+-- descomentar lo siguiente
+-- CREATE USER 'embuckets'@'localhost' IDENTIFIED BY 'bddtest00';
+-- GRANT ALL PRIVILEGES ON sivo.* to embuckets@'localhost' IDENTIFIED BY 'bddtest00';

@@ -8,6 +8,7 @@ package servlets;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import dominio.Encuesta;
 import dominio.Usuario;
 import java.io.IOException;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import service.EncuestaController;
+import service.VotacionController;
 
 /**
  *
@@ -53,7 +55,6 @@ public class EncuestaServlet extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -68,8 +69,17 @@ public class EncuestaServlet extends HttpServlet {
         //regresar las encuestas proximas en formato json
         HttpSession session = request.getSession();
         Usuario usuario = (Usuario) session.getAttribute("user");
+        String abre = request.getParameter("abre");
+        String cierra = request.getParameter("cierra");
         EncuestaController encuestaController = new EncuestaController();
-        List<Encuesta> encuestas = encuestaController.getEncuestasByIdUnidad(usuario.getIdUnidad());
+        List<Encuesta> encuestas = encuestaController.getEncuestasByIdUnidad(usuario.getIdUnidad(), abre, cierra);
+        if (session.getAttribute("rol").equals("alumno")) {
+            VotacionController votacionController = new VotacionController();
+            //recupera la opcion por la cual voto el alumno si es que existe
+            for (Encuesta encuesta : encuestas) {
+                encuesta.setVotado(votacionController.getOpcionVotada(encuesta.getIdEncuesta(), usuario.getMatricula(), usuario.getIdUnidad()));
+            }
+        }
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(JsonGenerator.Feature.WRITE_NUMBERS_AS_STRINGS);
         String jsonString = mapper.writeValueAsString(encuestas);
@@ -95,16 +105,16 @@ public class EncuestaServlet extends HttpServlet {
         request.getSession().setAttribute("encuestaId", encuestaId);
         EncuestaController encuestaController = new EncuestaController();
         Encuesta encuesta = encuestaController.getEncuestaById(encuestaId);
-        if (encuesta.getCierra().isAfter(LocalDateTime.now())){
+        if (encuesta.getCierra().isAfter(LocalDateTime.now())) {
             //redirigir a opcion votacion
             response.sendRedirect(getServletContext().getContextPath() + "/votacion.jsp");
-            
+
         } else {
             //redirigir a resultados
-            
+            response.sendRedirect(getServletContext().getContextPath() + "/resultados.jsp");
+
         }
-        
-        
+
     }
 
     /**

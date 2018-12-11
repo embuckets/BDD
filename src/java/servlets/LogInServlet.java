@@ -7,6 +7,7 @@ package servlets;
 
 import dominio.Administrador;
 import dominio.Alumno;
+import dominio.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -80,11 +81,11 @@ public class LogInServlet extends HttpServlet {
             throws ServletException, IOException {
         String matricula = request.getParameter("uname");
         String password = request.getParameter("psw");
-        
+
         HttpSession session = request.getSession();
         LogInController logInController = new LogInController();
         String rol = logInController.logIn(matricula, password);
-        String nextURL = "/home";
+        String nextURL = "/index.jsp";
         //si es usuario valido, es decir, rol es alumno o admin redirige a su home
         if (rol != null) {
             // agrega al alumno o admin a la session 
@@ -92,20 +93,13 @@ public class LogInServlet extends HttpServlet {
                 AlumnoController alumnoController = new AlumnoController();
                 Alumno alumno = alumnoController.getAlumnoByMatricula(matricula);
                 session.setAttribute("user", alumno);
-
-                request.setAttribute("matricula", alumno.getMatricula());
-                request.setAttribute("nombre", alumno.getNombre());
             } else if (rol.equalsIgnoreCase("admin")) {
                 AdministradorController administradorController = new AdministradorController();
                 Administrador admin = administradorController.getAdministradorByMatricula(matricula);
                 session.setAttribute("user", admin);
-
-                request.setAttribute("matricula", admin.getMatricula());
-                request.setAttribute("nombre", admin.getNombre());
             }
-            request.setAttribute("rol", rol);
-        } else {
-            nextURL = "/index.jsp";
+            session.setAttribute("rol", rol);
+            nextURL = "/home.jsp";
         }
 //        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextURL);
 //        dispatcher.forward(request, response);

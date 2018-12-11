@@ -1,45 +1,4 @@
 
-function Encuesta(id, titulo, descripcion, idUnidad) {
-    this.id = id;
-    this.titulo = titulo;
-    this.descripcion = descripcion;
-    this.abre = null;
-    this.cierra = null;
-    this.idUnidad = idUnidad;
-    this.opciones = [];
-    this.setAbre = function (year, month, day, hour, minute, second) {
-        this.abre = new Date(year, month, day, hour, minute, second);
-    };
-    this.setCierra = function (year, month, day, hour, minute, second) {
-        this.cierra = new Date(year, month, day, hour, minute, second);
-    };
-}
-
-function Opcion(id, idEncuesta, opcion, votos) {
-    this.id = id;
-    this.idEncuesta = idEncuesta;
-    this.opcion = opcion;
-    this.votos = votos;
-}
-
-
-function buildEncuesta(jsonObj) {
-    var idEncuesta = jsonObj.idEncuesta;
-    var titulo = jsonObj.titulo;
-    var descripcion = jsonObj.descripcion;
-    var idUnidad = jsonObj.idUnidad;
-    var encuesta = new Encuesta(idEncuesta, titulo, descripcion, idUnidad);
-    encuesta.setAbre(jsonObj.abre.year, jsonObj.abre.monthValue, jsonObj.abre.dayOfMonth, jsonObj.abre.hour, jsonObj.abre.minute, jsonObj.abre.second);
-    encuesta.setCierra(jsonObj.cierra.year, jsonObj.cierra.monthValue, jsonObj.cierra.dayOfMonth, jsonObj.cierra.hour, jsonObj.cierra.minute, jsonObj.cierra.second);
-    var i;
-    for (i in jsonObj.opciones) {
-        var opcionJSON = jsonObj.opciones[i];
-        var opcion = new Opcion(opcionJSON.idOpcion, opcionJSON.idEncuesta, opcionJSON.opcion, opcionJSON.votos);
-        encuesta.opciones.push(opcion);
-    }
-    return encuesta;
-}
-
 function display(jsonText) {
     var container = document.getElementById("form-voto");
     var jsonObj = JSON.parse(jsonText);
@@ -73,18 +32,18 @@ function buildCard(encuesta) {
     cardButton.value = "Votar";
     cardButton.className = "card-button";
 
-    var form = document.createElement("form");
-    form.method = "POST";
-    form.action = "votar";
+    // var form = document.createElement("form");
+    // form.method = "POST";
+    // form.action = "votar";
     var hidden = document.createElement("input");
     hidden.type = "hidden";
     hidden.name = "encuestaId";
     hidden.value = encuesta.id;
 
-    form.appendChild(cardTitle);
-    form.appendChild(cardText);
-    form.appendChild(cardAbre);
-    form.appendChild(cardCierra);
+    cardDiv.appendChild(cardTitle);
+    cardDiv.appendChild(cardText);
+    cardDiv.appendChild(cardAbre);
+    cardDiv.appendChild(cardCierra);
 
     var cardSelect = document.createElement("div");
     // cardSelect.name = "opciones";
@@ -96,7 +55,7 @@ function buildCard(encuesta) {
         var opcion = encuesta.opciones[i];
         //opcion 2
         var radio = createRadio(opcion);
-        form.appendChild(radio);
+        cardSelect.appendChild(radio);
 
         //opcion 1
         // var radioNode = document.createElement("input");
@@ -118,10 +77,11 @@ function buildCard(encuesta) {
     }
 
     // form.appendChild(cardSelect);
-    form.appendChild(cardButton);
-    form.appendChild(hidden);
+    cardDiv.appendChild(cardSelect);
+    cardDiv.appendChild(cardButton);
+    cardDiv.appendChild(hidden);
 
-    cardDiv.appendChild(form);
+    // cardDiv.appendChild(form);
     return cardDiv;
 }
 

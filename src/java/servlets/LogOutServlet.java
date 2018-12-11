@@ -5,24 +5,18 @@
  */
 package servlets;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import dominio.Encuesta;
-import dominio.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import service.EncuestaController;
-import service.OpcionController;
 
 /**
  *
  * @author emilio
  */
-public class OpcionServlet extends HttpServlet {
+public class LogOutServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,10 +35,10 @@ public class OpcionServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet OpcionServlet</title>");
+            out.println("<title>Servlet LogOutServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet OpcionServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet LogOutServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,18 +55,8 @@ public class OpcionServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int encuestaId = (int) request.getSession().getAttribute("encuestaId");
-        Encuesta encuesta = new EncuestaController().getEncuestaById(encuestaId);
-        Usuario usuario = (Usuario)request.getSession().getAttribute("user");
-        encuesta.setOpciones(new OpcionController().getOpcionesByIdEncuesta(encuestaId, usuario.getIdUnidad()));
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.enable(JsonGenerator.Feature.WRITE_NUMBERS_AS_STRINGS);
-        String jsonString = mapper.writeValueAsString(encuesta);
-        response.setContentType("application/json;charset=UTF-8");
-        try (PrintWriter writer = response.getWriter()) {
-            writer.write(jsonString);
-        }
-        //TODO: convertir a JSON 
+        request.getSession().invalidate();
+        response.sendRedirect(getServletContext().getContextPath());
     }
 
     /**

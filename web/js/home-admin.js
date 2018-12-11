@@ -4,9 +4,7 @@ function display(jsonText) {
     while (container.lastChild) {
         container.removeChild(container.lastChild);
     }
-
     var jsonArray = JSON.parse(jsonText);
-    var encuestas = [];
     for (i in jsonArray) {
         var encuesta = buildEncuesta(jsonArray[i]);
         var card = buildCard(encuesta);
@@ -35,21 +33,15 @@ function buildCard(encuesta) {
 
     var cardButton = document.createElement("input");
     cardButton.type = "submit";
+    cardButton.value = "Resultados";
     cardButton.className = "card-button";
     if (encuesta.cierra > new Date()) {
-        cardButton.value = "Votar";
-
-    } else {
-        cardButton.value = "Resultados";
-
-    }
-    if (encuesta.abre > new Date()) {
-        cardButton.disabled = "true";
+        cardButton.disabled = true;
     }
 
     var form = document.createElement("form");
     form.method = "POST";
-    form.action = "encuesta";
+    form.action = "encuesta"
     var hidden = document.createElement("input");
     hidden.type = "hidden";
     hidden.name = "encuestaId";
@@ -59,19 +51,12 @@ function buildCard(encuesta) {
     form.appendChild(cardText);
     form.appendChild(cardAbre);
     form.appendChild(cardCierra);
-    if (encuesta.votado) {
-        var cardVotado = document.createElement("p");
-        cardVotado.className = "text-bold";
-        cardVotado.innerHTML = "Votaste: " + encuesta.votado.opcion;
-        form.appendChild(cardVotado);
-    }
     form.appendChild(cardButton);
     form.appendChild(hidden);
 
     cardDiv.appendChild(form);
     return cardDiv;
 }
-
 
 function requestEncuestas() {
     var xhttp = new XMLHttpRequest();
@@ -85,3 +70,4 @@ function requestEncuestas() {
     xhttp.open("GET", "encuesta?abre=" + abre + "&cierra=" + cierra, true);
     xhttp.send();
 }
+

@@ -11,8 +11,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import dominio.Alumno;
 import dominio.Encuesta;
+import dominio.Usuario;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -65,7 +69,9 @@ public class EncuestaControllerTest {
         EncuestaController instance = new EncuestaController();
         List<Encuesta> expResult = new ArrayList<>();
         expResult.add(encuestaAzc);
-        List<Encuesta> result = instance.getEncuestasByIdUnidad(idUnidad);
+        LocalDate abre = LocalDate.now().minusDays(7);
+        LocalDate cierra = LocalDate.now().plusDays(7);
+        List<Encuesta> result = instance.getEncuestasByIdUnidad(idUnidad, abre.format(DateTimeFormatter.ISO_LOCAL_DATE), cierra.format(DateTimeFormatter.ISO_LOCAL_DATE));
         assertEquals(expResult, result);
 //        result.stream().forEach((e) -> System.out.println(e));
         // TODO review the generated test code and remove the default call to fail.
@@ -81,7 +87,9 @@ public class EncuestaControllerTest {
         EncuestaController instance = new EncuestaController();
         List<Encuesta> expResult = new ArrayList<>();
         expResult.add(encuestaAzc);
-        List<Encuesta> result = instance.getEncuestasByIdUnidad(idUnidad);
+        LocalDate abre = LocalDate.now().minusDays(7);
+        LocalDate cierra = LocalDate.now().plusDays(7);
+        List<Encuesta> result = instance.getEncuestasByIdUnidad(idUnidad, abre.format(DateTimeFormatter.ISO_LOCAL_DATE), cierra.format(DateTimeFormatter.ISO_LOCAL_DATE));
 //        assertEquals(expResult, result);
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(JsonGenerator.Feature.WRITE_NUMBERS_AS_STRINGS);
@@ -111,6 +119,35 @@ public class EncuestaControllerTest {
         Encuesta result = instance.getEncuestaById(idEncuesta);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
+    }
+
+    /**
+     * Test of getEncuestaById method, of class EncuestaController.
+     */
+    @Test
+    public void testGetEncuestasYVoto() {
+        System.out.println("getEncuestasById");
+        Alumno usuario = new Alumno();
+        usuario.setIdUnidad(2);
+        usuario.setMatricula("2143032439");
+        int idUnidad = 1;
+        EncuestaController encuestaController = new EncuestaController();
+        LocalDate abre = LocalDate.now().minusDays(7);
+        LocalDate cierra = LocalDate.now().plusDays(7);
+        List<Encuesta> encuestas = encuestaController.getEncuestasByIdUnidad(idUnidad, abre.format(DateTimeFormatter.ISO_LOCAL_DATE), cierra.format(DateTimeFormatter.ISO_LOCAL_DATE));
+        VotacionController votacionController = new VotacionController();
+        for (Encuesta encuesta : encuestas) {
+            encuesta.setVotado(votacionController.getOpcionVotada(encuesta.getIdEncuesta(), usuario.getMatricula(), usuario.getIdUnidad()));
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(JsonGenerator.Feature.WRITE_NUMBERS_AS_STRINGS);
+        try {
+            String jsonString = mapper.writeValueAsString(encuestas);
+            System.out.println(jsonString);
+            // TODO review the generated test code and remove the default call to fail.
+        } catch (JsonProcessingException ex) {
+            ex.printStackTrace();
+        }
     }
 
 }

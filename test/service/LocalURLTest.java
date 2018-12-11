@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
  * @author emilio
  */
 public class LocalURLTest {
-    private LocalURL localURLTested;
+    private JdbcUrl localURLTested;
     
     public LocalURLTest() {
     }
@@ -32,7 +32,7 @@ public class LocalURLTest {
     
     @Before
     public void setUp() {
-        localURLTested = new LocalURL();
+        localURLTested = new JdbcUrl("database-local.xml");
         
     }
     
@@ -41,7 +41,7 @@ public class LocalURLTest {
     }
 
     /**
-     * Test of getURL method, of class LocalURL.
+     * Test of getURL method, of class JdbcUrl.
      */
     @Test
     public void testGetURL() {
@@ -50,13 +50,12 @@ public class LocalURLTest {
     }
 
     /**
-     * Test of init method, of class LocalURL.
+     * Test of init method, of class JdbcUrl.
      */
     @Test
     public void testInit() {
         System.out.println("init");
-        localURLTested = new LocalURL();
-        localURLTested.init();
+        localURLTested = new JdbcUrl("database-local.xml");
         // TODO review the generated test code and remove the default call to fail.
     }
     

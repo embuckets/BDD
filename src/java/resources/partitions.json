@@ -1,0 +1,83 @@
+{
+    "particiones": [
+        {
+            "tabla": "alumno",
+            "fragmentos": [
+                {
+                    "id_unidad": "1",
+                    "url": ["database-local.xml", "database-nube.xml"]
+                },
+                {
+                    "id_unidad": "2",
+                    "url": ["database-nube.xml"]
+                }
+            ]
+        },
+        {
+            "tabla": "administrador",
+            "fragmentos": [
+                {
+                    "id_unidad": "1",
+                    "url": ["database-local.xml", "database-nube.xml"]
+                },
+                {
+                    "id_unidad": "2",
+                    "url": ["database-nube.xml"]
+                }
+            ]
+        },
+        {
+            "tabla": "login",
+            "fragmentos": [
+                {
+                    "id_unidad": "1",
+                    "url": ["database-local.xml", "database-nube.xml"]
+                },
+                {
+                    "id_unidad": "2",
+                    "url": ["database-nube.xml"]
+                }
+            ]
+        },
+        {
+            "tabla": "encuesta",
+            "fragmentos": [
+                {
+                    "id_unidad": "1",
+                    "url": ["database-local.xml", "database-nube.xml"]
+                },
+                {
+                    "id_unidad": "2",
+                    "url": ["database-nube.xml"]
+                }
+            ]
+        },
+        {
+            "tabla": "opcion",
+            "fragmentos": [
+                {
+                    "id_unidad": "1",
+                    "url": ["database-local.xml", "database-nube.xml"]
+                },
+                {
+                    "id_unidad": "2",
+                    "url": ["database-nube.xml"]
+                }
+            ]
+        },
+        {
+            "tabla": "votacion",
+            "fragmentos": [
+                {
+                    "id_unidad": "1",
+                    "url": ["database-local.xml", "database-nube.xml"]
+                },
+                {
+                    "id_unidad": "2",
+                    "url": ["database-nube.xml"]
+                }
+            ]
+        }
+        
+    ]
+}
