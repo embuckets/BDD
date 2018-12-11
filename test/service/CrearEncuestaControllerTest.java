@@ -58,5 +58,23 @@ public class CrearEncuestaControllerTest {
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
     }
+
+    /**
+     * Test of isIDValid method, of class CrearEncuestaController.
+     */
+    @Test
+    public void testIsIDValid() {
+        System.out.println("isIDValid");
+        int idEncuesta = 0;
+        int idUnidad = 0;
+        CrearEncuestaController instance = new CrearEncuestaController();
+        boolean expResult = false;
+        for (int i = 0; i<1 ; i++){
+            int rand= encuestaTested.generateID();
+            System.out.println(5 + " : " + instance.isIDValid(5, 1)); 
+            
+        }
+        // TODO review the generated test code and remove the default call to fail.
+    }
     
 }

@@ -18,6 +18,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -32,6 +34,7 @@ public class CrearEncuestaController {
         ResultSet resultSet = null;
         boolean success = false;
         List<Connection> conns = new ArrayList<>();
+        int idEncuestaValido = 0;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             for (Iterator<String> iterator = urls.iterator(); iterator.hasNext();) {
@@ -39,21 +42,28 @@ public class CrearEncuestaController {
                 Connection conn = DriverManager.getConnection(url + "&useLegacyDatetimeCode=false&serverTimezone=America/Mexico_City");
                 conns.add(conn);
             }
+            boolean isValid = false;
+            while (!isValid) {
+                idEncuestaValido = encuesta.generateID();
+                isValid = isIDValid(idEncuestaValido, idUnidad);
+            }
+
             for (Connection conn : conns) {
                 conn.setAutoCommit(false);
-                preparedStatement = conn.prepareStatement("insert into encuesta values(default,?,?,?,?,default,?)", Statement.RETURN_GENERATED_KEYS);//and cierra between now() - interval 7 day and now()
-                preparedStatement.setString(1, encuesta.getTitulo());
-                preparedStatement.setString(2, encuesta.getDescripcion());
-                preparedStatement.setTimestamp(3, Timestamp.valueOf(encuesta.getAbre()));
-                preparedStatement.setTimestamp(4, Timestamp.valueOf(encuesta.getCierra()));
-                preparedStatement.setInt(5, idUnidad);
+                preparedStatement = conn.prepareStatement("insert into encuesta values(?,?,?,?,?,default,?)", Statement.RETURN_GENERATED_KEYS);//and cierra between now() - interval 7 day and now()
+                preparedStatement.setInt(1, idEncuestaValido);
+                preparedStatement.setString(2, encuesta.getTitulo());
+                preparedStatement.setString(3, encuesta.getDescripcion());
+                preparedStatement.setTimestamp(4, Timestamp.valueOf(encuesta.getAbre()));
+                preparedStatement.setTimestamp(5, Timestamp.valueOf(encuesta.getCierra()));
+                preparedStatement.setInt(6, idUnidad);
                 preparedStatement.executeUpdate();
                 resultSet = preparedStatement.getGeneratedKeys();
                 if (resultSet.next()) {
-                    int idEncuesta = resultSet.getInt(1);
+//                    int idEncuesta = resultSet.getInt(1);
                     for (Opcion opcion : encuesta.getOpciones()) {
                         preparedStatement = conn.prepareStatement("insert into opcion values(default,?,?)");
-                        preparedStatement.setInt(1, idEncuesta);
+                        preparedStatement.setInt(1, idEncuestaValido);
                         preparedStatement.setString(2, opcion.getOpcion());
                         preparedStatement.executeUpdate();
                     }
@@ -112,11 +122,11 @@ public class CrearEncuestaController {
         return success;
     }
 
-    private boolean isIDValid(int idEncuesta, int idUnidad) {
+    public boolean isIDValid(int idEncuesta, int idUnidad) {
         PartitionRules partitionRules = new PartitionRules();
         List<String> urls = partitionRules.getUrls("encuesta", String.valueOf(idUnidad));
         List<Connection> conns = new ArrayList<>();
-        boolean success = false;
+        boolean success = true;
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
 
@@ -131,12 +141,11 @@ public class CrearEncuestaController {
                 preparedStatement = conn.prepareStatement("select id_encuesta from encuesta where id_encuesta=?");
                 preparedStatement.setInt(1, idEncuesta);
                 resultSet = preparedStatement.executeQuery();
-                if (!resultSet.next()) {
+                if (resultSet.next()) {
                     success = false;
                     break;
                 }
             }
-            success = true;
 
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
@@ -161,6 +170,13 @@ public class CrearEncuestaController {
                     } catch (SQLException ex) {
                         ex.printStackTrace();
                     }
+                }
+            }
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
                 }
             }
         }

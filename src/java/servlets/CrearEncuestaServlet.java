@@ -6,6 +6,7 @@
 package servlets;
 
 import dominio.Encuesta;
+import dominio.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
@@ -45,7 +46,7 @@ public class CrearEncuestaServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CrearEncuestaServlet</title>");            
+            out.println("<title>Servlet CrearEncuestaServlet</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet CrearEncuestaServlet at " + request.getContextPath() + "</h1>");
@@ -87,16 +88,21 @@ public class CrearEncuestaServlet extends HttpServlet {
         String cierraTime = request.getParameter("cierra-time");
         String[] options = request.getParameterValues("options[]");
         Encuesta encuesta = new Encuesta();
-        encuesta.setIdEncuesta((int) request.getSession().getAttribute("encuestaId"));
+        encuesta.setIdUnidad(((Usuario) request.getSession().getAttribute("user")).getIdUnidad());
         encuesta.setTitulo(titulo);
         encuesta.setDescripcion(desc);
         encuesta.setAbre(LocalDateTime.parse(abreDate + "T" + abreTime));
         encuesta.setCierra(LocalDateTime.parse(cierraDate + "T" + cierraTime));
         encuesta.crearOpciones(options);
-        
-        
+
         CrearEncuestaController controller = new CrearEncuestaController();
-        
+
+        boolean exito = controller.crearEncuesta(encuesta, encuesta.getIdUnidad());
+        if (exito){
+            response.sendRedirect(getServletContext().getContextPath() + "/home");
+        }else{
+            response.sendRedirect(getServletContext().getContextPath() + "/home");
+        }
     }
 
     /**

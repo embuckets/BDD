@@ -15,7 +15,7 @@ function newOption() {
     optionsContainer.appendChild(optionDiv);
 
     newOption.value = document.getElementById("myInput").value;
-    newOption.name = "options"
+    newOption.name = "options[]";
     newOption.readOnly = true;
     newOption.className = "form-crear-input-opc disabled";
 
