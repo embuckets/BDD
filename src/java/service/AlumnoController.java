@@ -31,7 +31,7 @@ public class AlumnoController {
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 String url = iterator.next();
-                conn = DriverManager.getConnection(url);
+                conn = DriverManager.getConnection(url + "&useLegacyDatetimeCode=false&serverTimezone=America/Mexico_City");
                 preparedStatement = conn.prepareStatement("select * from alumno where matricula =?");
                 preparedStatement.setString(1, matricula);
                 resultSet = preparedStatement.executeQuery();

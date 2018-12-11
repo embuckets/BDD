@@ -35,7 +35,7 @@ public class ResultadoController {
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 String url = iterator.next();
-                conn = DriverManager.getConnection(url);
+                conn = DriverManager.getConnection(url + "&useLegacyDatetimeCode=false&serverTimezone=America/Mexico_City");
                 preparedStatement = conn.prepareStatement("select opcion.id_opcion, opcion.id_encuesta, opcion.opcion, count(votacion.id_opcion) as votos from votacion right join opcion using (id_encuesta,id_opcion) where id_encuesta=? group by opcion.opcion");//and cierra between now() - interval 7 day and now()
                 preparedStatement.setInt(1, idEncuesta);
                 resultSet = preparedStatement.executeQuery();

@@ -33,7 +33,7 @@ public class LogInController {
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 String url = iterator.next();
-                conn = DriverManager.getConnection(url);
+                conn = DriverManager.getConnection(url + "&useLegacyDatetimeCode=false&serverTimezone=America/Mexico_City");
                 preparedStatement = conn.prepareStatement("select rol from rol where id_rol = ( select id_rol from login where matricula=? and password=? )");
                 preparedStatement.setString(1, user);
                 preparedStatement.setString(2, password);
@@ -95,7 +95,7 @@ public class LogInController {
 //                String url = iterator.next();
 //                
 //            }
-//            conn = DriverManager.getConnection(url);
+//            conn = DriverManager.getConnection(url + "&useLegacyDatetimeCode=false&serverTimezone=America/Mexico_City");
 //            preparedStatement = conn.prepareStatement("select rol from rol where id_rol = ( select id_rol from login where matricula=? and password=? )");
 //            preparedStatement.setString(1, user);
 //            preparedStatement.setString(2, password);

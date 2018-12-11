@@ -10,6 +10,7 @@
         Usuario usuario = (Usuario) request.getSession().getAttribute("user");
         String userName = usuario.getNombre();
         String home = getServletContext().getContextPath() + "/home";
+        String crear = getServletContext().getContextPath() + "/crear.jsp";
 %>  
 <header>
     <div class="topnav">
@@ -22,7 +23,7 @@
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-content">
-                <a href="crear.jsp"><i class="fa fa-plus"></i> Nueva Encuesta</a>
+                <a href=<%=crear%>><i class="fa fa-plus"></i> Nueva Encuesta</a>
                 <a href="logout"><i class="fa fa-power-off"></i> Salir</a>
             </div>
         </div>

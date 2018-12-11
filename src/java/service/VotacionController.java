@@ -34,7 +34,7 @@ public class VotacionController {
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 String url = iterator.next();
-                conn = DriverManager.getConnection(url);
+                conn = DriverManager.getConnection(url + "&useLegacyDatetimeCode=false&serverTimezone=America/Mexico_City");
                 preparedStatement = conn.prepareStatement("select * from opcion where id_opcion = (select id_opcion from votacion where id_encuesta=? and matricula=?);");
                 preparedStatement.setInt(1, idEncuesta);
                 preparedStatement.setString(2, matricula);
@@ -86,7 +86,7 @@ public class VotacionController {
             Class.forName("com.mysql.cj.jdbc.Driver");
             for (Iterator<String> iterator = urls.iterator(); iterator.hasNext();) {
                 String url = iterator.next();
-                Connection conn = DriverManager.getConnection(url);
+                Connection conn = DriverManager.getConnection(url + "&useLegacyDatetimeCode=false&serverTimezone=America/Mexico_City");
                 conns.add(conn);
             }
             for (Connection conn : conns) {
@@ -162,7 +162,7 @@ public class VotacionController {
             Class.forName("com.mysql.cj.jdbc.Driver");
             for (Iterator<String> iterator = urls.iterator(); iterator.hasNext();) {
                 String url = iterator.next();
-                Connection conn = DriverManager.getConnection(url);
+                Connection conn = DriverManager.getConnection(url + "&useLegacyDatetimeCode=false&serverTimezone=America/Mexico_City");
                 conns.add(conn);
             }
             for (Connection conn : conns) {

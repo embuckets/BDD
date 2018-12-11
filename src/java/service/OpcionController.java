@@ -33,7 +33,7 @@ public class OpcionController {
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 String url = iterator.next();
-                conn = DriverManager.getConnection(url);
+                conn = DriverManager.getConnection(url + "&useLegacyDatetimeCode=false&serverTimezone=America/Mexico_City");
                 preparedStatement = conn.prepareStatement("select * from opcion where id_encuesta=?");//and cierra between now() - interval 7 day and now()
                 preparedStatement.setInt(1, idEncuesta);
                 resultSet = preparedStatement.executeQuery();

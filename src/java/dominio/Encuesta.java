@@ -106,6 +106,13 @@ public class Encuesta {
     public void setOpciones(List<Opcion> opciones) {
         this.opciones = opciones;
     }
+    
+    public void crearOpciones(String[] opciones){
+        for (String opcion : opciones){
+            Opcion op = new Opcion(this.idEncuesta, idEncuesta, opcion);
+            this.opciones.add(op);
+        }
+    }
 
     @Override
     public int hashCode() {

@@ -32,7 +32,7 @@ public class EncuestaController {
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 String url = iterator.next();
-                conn = DriverManager.getConnection(url);
+                conn = DriverManager.getConnection(url  + "&useLegacyDatetimeCode=false&serverTimezone=America/Mexico_City");
                 preparedStatement = conn.prepareStatement("select * from encuesta where id_unidad=? and abre > '" + abre + "' and cierra < '" + cierra + " 23:59:59'");
                 preparedStatement.setInt(1, idUnidad);
                 resultSet = preparedStatement.executeQuery();
@@ -92,7 +92,7 @@ public class EncuestaController {
             String url = iterator.next();
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                conn = DriverManager.getConnection(url);
+                conn = DriverManager.getConnection(url + "&useLegacyDatetimeCode=false&serverTimezone=America/Mexico_City");
                 preparedStatement = conn.prepareStatement("select * from encuesta where id_encuesta=?");//and cierra between now() - interval 7 day and now()
                 preparedStatement.setInt(1, idEncuesta);
                 resultSet = preparedStatement.executeQuery();

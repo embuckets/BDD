@@ -28,6 +28,10 @@
         <servlet-name>ResultadoServlet</servlet-name>
         <servlet-class>servlets.ResultadoServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CrearEncuestaServlet</servlet-name>
+        <servlet-class>servlets.CrearEncuestaServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LogInServlet</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -55,6 +59,10 @@
     <servlet-mapping>
         <servlet-name>ResultadoServlet</servlet-name>
         <url-pattern>/resultado</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CrearEncuestaServlet</servlet-name>
+        <url-pattern>/crear</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
