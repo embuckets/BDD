@@ -112,4 +112,59 @@ public class CrearEncuestaController {
         return success;
     }
 
+    private boolean isIDValid(int idEncuesta, int idUnidad) {
+        PartitionRules partitionRules = new PartitionRules();
+        List<String> urls = partitionRules.getUrls("encuesta", String.valueOf(idUnidad));
+        List<Connection> conns = new ArrayList<>();
+        boolean success = false;
+        ResultSet resultSet = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            for (Iterator<String> iterator = urls.iterator(); iterator.hasNext();) {
+                String url = iterator.next();
+                Connection conn = DriverManager.getConnection(url + "&useLegacyDatetimeCode=false&serverTimezone=America/Mexico_City");
+                conns.add(conn);
+            }
+            for (Connection conn : conns) {
+                preparedStatement = conn.prepareStatement("select id_encuesta from encuesta where id_encuesta=?");
+                preparedStatement.setInt(1, idEncuesta);
+                resultSet = preparedStatement.executeQuery();
+                if (!resultSet.next()) {
+                    success = false;
+                    break;
+                }
+            }
+            success = true;
+
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+
+        } catch (SQLException ex) {
+            //sqlstate = 23000 -> duplicate entry
+            //TODO: checar si la base de datos esta desconectada para intentar las otras
+            ex.printStackTrace();
+        } finally {
+
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            for (Connection conn : conns) {
+                if (conn != null) {
+                    try {
+                        conn.close();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        }
+        return success;
+    }
+
 }

@@ -36,8 +36,8 @@ public class CrearEncuestaControllerTest {
     
     @Before
     public void setUp() {
-        encuestaTested = new Encuesta(0, "test", "test", LocalDateTime.now(), LocalDateTime.now().plusDays(1), 2);
-        String [] opciones = {"unotest", "dostest"};
+        encuestaTested = new Encuesta(0, "testazc", "testazc", LocalDateTime.now(), LocalDateTime.now().plusDays(1), 1);
+        String [] opciones = {"unotestazc", "dostestazc"};
         encuestaTested.crearOpciones(opciones);
         encuestaController = new CrearEncuestaController();
         

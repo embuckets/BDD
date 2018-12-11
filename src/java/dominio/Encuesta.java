@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 /**
  *
@@ -106,9 +107,9 @@ public class Encuesta {
     public void setOpciones(List<Opcion> opciones) {
         this.opciones = opciones;
     }
-    
-    public void crearOpciones(String[] opciones){
-        for (String opcion : opciones){
+
+    public void crearOpciones(String[] opciones) {
+        for (String opcion : opciones) {
             Opcion op = new Opcion(this.idEncuesta, idEncuesta, opcion);
             this.opciones.add(op);
         }
@@ -162,6 +163,11 @@ public class Encuesta {
     @Override
     public String toString() {
         return "Encuesta{" + "idEncuesta=" + idEncuesta + ", titulo=" + titulo + ", descripcion=" + descripcion + ", abre=" + abre + ", cierra=" + cierra + ", idUnidad=" + idUnidad + '}';
+    }
+
+    public int generateID() {
+        Random rand = new Random();
+        return rand.nextInt(9999);
     }
 
 }
