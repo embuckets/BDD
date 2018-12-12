@@ -5,6 +5,8 @@
 --%>
 <footer>
     <div class="footer">
-        <p>Footer</p>
+        <p>Desarrollado por</p>
+            <p>Emilio Hernández Segovia & Diana Jaqueline Chagoya Galván & Laura Fernanda Eizmendi Hernández </p>
+            <p>Bases de Datos Distribuidas</p>
     </div>
 </footer>

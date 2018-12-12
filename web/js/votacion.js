@@ -11,7 +11,7 @@ function display(jsonText) {
 
 function buildCard(encuesta) {
     var cardDiv = document.createElement("div");
-    cardDiv.className = "card grid-item";
+    cardDiv.className = "card grid-item pad-top";
     var cardTitle = document.createElement("h3");
     cardTitle.className = "card-title";
     cardTitle.innerHTML = encuesta.titulo;
@@ -86,7 +86,7 @@ function buildCard(encuesta) {
 }
 
 function createRadio(opcion) {
-    var radioHtml = "<label class=\"card-radio\"><input type='radio' name='opciones' value='" + opcion.id + "' required />" + " " + opcion.opcion + "</label>";
+    var radioHtml = "<label class=\"card-radio\"><input type='radio' name='opciones' value='" + opcion.idOpcion + "' required />" + " " + opcion.opcion + "</label>";
     var radioDiv = document.createElement("div");
     radioDiv.innerHTML = radioHtml;
     return radioDiv.firstChild;

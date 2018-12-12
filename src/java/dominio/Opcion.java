@@ -6,6 +6,7 @@
 package dominio;
 
 import java.util.Objects;
+import java.util.Random;
 
 /**
  *
@@ -90,6 +91,11 @@ public class Opcion {
             return false;
         }
         return true;
+    }
+    
+    public int generateID() {
+        Random rand = new Random();
+        return rand.nextInt(9999);
     }
 
 }

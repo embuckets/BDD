@@ -60,7 +60,7 @@ public class CrearEncuestaControllerTest {
     }
 
     /**
-     * Test of isIDValid method, of class CrearEncuestaController.
+     * Test of isIDEncuestaValid method, of class CrearEncuestaController.
      */
     @Test
     public void testIsIDValid() {
@@ -71,7 +71,7 @@ public class CrearEncuestaControllerTest {
         boolean expResult = false;
         for (int i = 0; i<1 ; i++){
             int rand= encuestaTested.generateID();
-            System.out.println(5 + " : " + instance.isIDValid(5, 1)); 
+            System.out.println(5 + " : " + instance.isIDEncuestaValid(5, 1)); 
             
         }
         // TODO review the generated test code and remove the default call to fail.

@@ -21,11 +21,12 @@
 
         <body onload="requestOpciones()">
         <jsp:include page="templates/header.jsp"></jsp:include>
-
-            <div class="form-voto">
-                <form id="form-voto" action="votar" method="POST"></form>
-                <a class="return-btn" href="<%=home%>">Regresar</a>
+            <main>
+                <div class="form-voto">
+                    <form id="form-voto" action="votar" method="POST"></form>
+                    <a class="return-btn" href="<%=home%>">Regresar</a>
             </div>
+        </main>
 
         <jsp:include page="templates/footer.jsp"></jsp:include>
     </body>
